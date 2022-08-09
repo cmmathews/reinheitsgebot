@@ -1,9 +1,8 @@
-package org.bitbucket.cpointe.reinheitsgsbot;
+package org.bitbucket.cpointe.reinheitsgebot;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
-import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
@@ -17,6 +16,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Extends the standard Maven Enforcer Banned Dependency rule to include support for searching for banned dependencies
@@ -29,7 +29,7 @@ import java.util.Set;
  * module are missed and become GAV errors in the child, limiting the usefulness of the banned dependency check for
  * that scenario.
  */
-public class BannedDependeneciesIncludingDependencyManagementRule extends BannedDependencies {
+public class BannedDependenciesIncludingDependencyManagementRule extends BannedDependencies {
 
     /**
      * Dependency management dependencies pulled off the Maven Project.
@@ -73,9 +73,26 @@ public class BannedDependeneciesIncludingDependencyManagementRule extends Banned
     protected Set<Artifact> checkDependencies(Set<Artifact> theDependencies, Log log)
             throws EnforcerRuleException {
 
-        Set<Artifact> dependenciesToCheck = new HashSet<>(theDependencies);
+        // check standard dependencies for banned artifacts:
+        Set<Artifact> bannedDependencies = super.checkDependencies(theDependencies, log);
 
-        // add in any dependencies from dependency management:
+        // check dependencies from dependency management for banned artifacts:
+        Set<Artifact> bannedDependenciesFromDependencyManagement = checkForDependencyManagementBannedDependencies(log);
+
+        Set<Artifact> combinedBannedDependencies = new TreeSet<>();
+        if (bannedDependencies != null) {
+            combinedBannedDependencies.addAll(bannedDependencies);
+        }
+        if (bannedDependenciesFromDependencyManagement != null) {
+            combinedBannedDependencies.addAll(bannedDependenciesFromDependencyManagement);
+        }
+
+        return combinedBannedDependencies;
+
+    }
+
+    private Set<Artifact> checkForDependencyManagementBannedDependencies(Log log) throws EnforcerRuleException {
+        Set<Artifact> dependenciesToCheck = new HashSet<>();
         for (Dependency dependency : dependencyManagementDependencies) {
             String groupId = dependency.getGroupId();
             String artifactId = dependency.getArtifactId();
@@ -83,14 +100,27 @@ public class BannedDependeneciesIncludingDependencyManagementRule extends Banned
             String scope = dependency.getScope();
             String type = dependency.getType();
             String classifier = dependency.getClassifier();
-            ArtifactHandler artifactHandler = new DefaultArtifactHandler();
+            ArtifactHandler artifactHandler = new FromDependencyManagementArtifactHandler();
             Artifact artifact = new DefaultArtifact(groupId, artifactId, version, scope, type, classifier, artifactHandler);
 
             dependenciesToCheck.add(artifact);
         }
 
         return super.checkDependencies(dependenciesToCheck, log);
+    }
 
+    @Override
+    protected CharSequence getErrorMessage(Artifact artifact) {
+        CharSequence errorMessage;
+        ArtifactHandler artifactHandler = artifact.getArtifactHandler();
+        if (artifactHandler instanceof FromDependencyManagementArtifactHandler) {
+            errorMessage = "Found Banned Dependency (via dependencyManagement): " + artifact.getId() + System.lineSeparator();
+
+        } else {
+            errorMessage = "Found Banned Dependency: " + artifact.getId() + System.lineSeparator();
+
+        }
+        return errorMessage;
     }
 
 }
