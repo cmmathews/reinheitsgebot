@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.bitbucket.cpointe</groupId>
+        <groupId>org.bitbucket.cpointe.reinheitsgebot</groupId>
         <artifactId>reinheitsgebot</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>reinheitsgebot-test</artifactId>
@@ -22,7 +22,7 @@
                 <configuration>
                     <rules>
                         <bannedDependenciesAndDependencyManagementDepenendencies
-                                implementation="org.bitbucket.cpointe.reinheitsgsbot.BannedDependeneciesIncludingDependencyManagementRule">
+                                implementation="org.bitbucket.cpointe.reinheitsgebot.BannedDependenciesIncludingDependencyManagementRule">
                         </bannedDependenciesAndDependencyManagementDepenendencies>
                     </rules>
                 </configuration>
