@@ -54,7 +54,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <version.enforcer>3.1.0</version.enforcer>
-        <version.maven.core>3.2.0</version.maven.core>
     </properties>
 
     <build>
@@ -106,7 +105,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>${version.maven.core}</version>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -119,13 +118,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${version.maven.core}</version>
-                        <configuration>
-                            <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
-                            <!-- NB JDK 8 Javadoc linter is very strict, so deactivate it if we're
-                                using Java 8 -->
-                            <additionalparam>-Xdoclint:none</additionalparam>
-                        </configuration>
+                        <version>3.4.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -138,7 +131,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -151,9 +144,6 @@
                     </plugin>
                 </plugins>
             </build>
-            <properties>
-                <additionalparam>-Xdoclint:none</additionalparam>
-            </properties>
         </profile>
     </profiles>
 
