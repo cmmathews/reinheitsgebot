@@ -101,9 +101,13 @@ public class BannedDependenciesIncludingDependencyManagementRule extends BannedD
             String type = dependency.getType();
             String classifier = dependency.getClassifier();
             ArtifactHandler artifactHandler = new FromDependencyManagementArtifactHandler();
-            Artifact artifact = new DefaultArtifact(groupId, artifactId, version, scope, type, classifier, artifactHandler);
+            try {
+                Artifact artifact = new DefaultArtifact(groupId, artifactId, version, scope, type, classifier, artifactHandler);
+                dependenciesToCheck.add(artifact);
 
-            dependenciesToCheck.add(artifact);
+            } catch (Exception e) {
+                throw new EnforcerRuleException("Could not resolve artifact " + groupId + ":" + artifactId + ":" + version);
+            }
         }
 
         return super.checkDependencies(dependenciesToCheck, log);
