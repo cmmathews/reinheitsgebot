@@ -4,7 +4,7 @@
 
     <groupId>org.bitbucket.cpointe.reinheitsgebot</groupId>
     <artifactId>reinheitsgebot</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Reinheitsgbot</name>
@@ -37,7 +37,7 @@
         <connection>scm:git:ssh://git@bitbucket.org/cpointe/reinheitgebot.git</connection>
         <developerConnection>scm:git:ssh://git@bitbucket.org/cpointe/reinheitsgebot.git</developerConnection>
         <url>https://bitbucket.org/cpointe/reinheitsgebot/</url>
-      <tag>reinheitsgebot-1.0.1</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
