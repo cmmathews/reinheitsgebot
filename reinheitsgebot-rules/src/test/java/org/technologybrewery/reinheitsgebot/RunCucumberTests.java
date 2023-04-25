@@ -1,4 +1,4 @@
-package org.bitbucket.cpointe.reinheitsgebot;
+package org.technologybrewery.reinheitsgebot;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;

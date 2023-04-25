@@ -1,5 +1,5 @@
 # Reinheitsgebot #
-[![Maven Central](https://img.shields.io/maven-central/v/org.bitbucket.cpointe.reinheitsgebot/reinheitsgebot.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.bitbucket.cpointe.reinheitsgebot%22%20AND%20a%3A%22reinheitsgdsebot%22)
+[![Maven Central](https://img.shields.io/maven-central/v/org.technologybrewery.reinheitsgebot/reinheitsgebot.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.technologybrewery.reinheitsgebot%22%20AND%20a%3A%22reinheitsgdsebot%22)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/mit)
 
 In German history, Reinheitsgebot (pronounced RINE-HITES-KUH-BOWT) was a ["purity order"](https://en.wikipedia.org/wiki/Reinheitsgebot) regulating the ingredients that
@@ -23,7 +23,7 @@ Enforcer Plugin and how to layer Reinheitsgebot into it:
             <configuration>
                 <rules>
                     <!-- TODO: ADD THIS RULE FOR BANNING IN DEPENDENCY MANAGEMENT: -->
-                    <bannedDependenciesAndDependencyManagementDepenendencies implementation="org.bitbucket.cpointe.reinheitsgebot.BannedDependenciesIncludingDependencyManagementRule">
+                    <bannedDependenciesAndDependencyManagementDepenendencies implementation="org.technologybrewery.reinheitsgebot.BannedDependenciesIncludingDependencyManagementRule">
                     </bannedDependenciesAndDependencyManagementDepenendencies>
                 </rules>
             </configuration>
@@ -39,7 +39,7 @@ Enforcer Plugin and how to layer Reinheitsgebot into it:
                             <bannedDependenciesAndDependencyManagementDepenendencies>
                                 <excludes>
                                     <!-- TODO: ADD GAV INFO AS YOU WOULD FOR NORMAL BANNED DEPENDENCIES: -->
-                                    <exclude>org.bitbucket.askllc.fermenter.stout:stout-java</exclude>
+                                    <exclude>org.technologybrewery.fermenter.stout:stout-java</exclude>
                                     ...
                                 </excludes>
                             </bannedDependenciesAndDependencyManagementDepenendencies>
@@ -50,7 +50,7 @@ Enforcer Plugin and how to layer Reinheitsgebot into it:
             <dependencies>
                 <!-- TODO: ADD THIS PROJECT'S DEPENDENCY FOR RULE RESOLUTION: -->
                 <dependency>
-                    <groupId>org.bitbucket.cpointe.reinheitsgebot</groupId>
+                    <groupId>org.technologybrewery.reinheitsgebot</groupId>
                     <artifactId>reinheitsgebot-rules</artifactId>
                     <!-- TODO: UPDATE TO LATEST VERSION! -->
                     <version>1.0.0-SNAPSHOT</version>
@@ -70,10 +70,10 @@ like the following - please note the `(via dependencyManagement)` addition to
 warning output when the banned dependency exists in dependency management:
 ```
 [INFO] --- maven-enforcer-plugin:3.1.0:enforce (enforce-banned-dependencies-and-dependency-management-dependencies) @ reinheitsgebot-test ---
-[WARNING] Rule 0: org.bitbucket.cpointe.reinheitsgebot.BannedDependenciesIncludingDependencyManagementRule failed with message:
+[WARNING] Rule 0: org.technologybrewery.reinheitsgebot.BannedDependenciesIncludingDependencyManagementRule failed with message:
 Typically, you would like fail the build - but we just want to see warning here
-Found Banned Dependency (via dependencyManagement): org.bitbucket.askllc.fermenter.stout:stout-java:jar:1.0.0
-Found Banned Dependency: org.bitbucket.askllc.krausening:krausening:jar:10
+Found Banned Dependency (via dependencyManagement): org.technologybrewery.fermenter.stout:stout-java:jar:1.0.0
+Found Banned Dependency: org.technologybrewery.krausening:krausening:jar:10
 Use 'mvn dependency:tree' to locate the source of the banned dependencies.
 ```
 
@@ -81,7 +81,7 @@ Use 'mvn dependency:tree' to locate the source of the banned dependencies.
 
 Reinheitsgebot uses both the `maven-release-plugin` and the `nexus-staging-maven-plugin` to facilitate the release and deployment of new Reinheitsgebot builds. In order to perform a release, you must:
 
-1.) Obtain a [JIRA](https://issues.sonatype.org/secure/Dashboard.jspa) account with Sonatype OSSRH and access to the `org.bitbucket.askllc` project group
+1.) Obtain a [JIRA](https://issues.sonatype.org/secure/Dashboard.jspa) account with Sonatype OSSRH and access to the `org.technologybrewery` project group
 
 2.) Ensure that your Sonatype OSSRH JIRA account credentials are specified in your `settings.xml`:
 

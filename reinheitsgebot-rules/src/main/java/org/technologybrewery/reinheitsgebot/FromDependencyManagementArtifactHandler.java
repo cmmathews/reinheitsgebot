@@ -1,4 +1,4 @@
-package org.bitbucket.cpointe.reinheitsgebot;
+package org.technologybrewery.reinheitsgebot;
 
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 

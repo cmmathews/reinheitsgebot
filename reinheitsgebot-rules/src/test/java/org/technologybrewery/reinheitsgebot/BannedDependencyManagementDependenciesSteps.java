@@ -1,4 +1,4 @@
-package org.bitbucket.cpointe.reinheitsgebot;
+package org.technologybrewery.reinheitsgebot;
 
 import io.cucumber.java.DefaultDataTableEntryTransformer;
 import io.cucumber.java.en.Given;
