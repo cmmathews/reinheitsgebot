@@ -10,7 +10,7 @@
 
     <groupId>org.technologybrewery.reinheitsgebot</groupId>
     <artifactId>reinheitsgebot</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
 
     <name>Reinheitsgbot</name>
@@ -43,7 +43,7 @@
         <connection>scm:git:ssh://git@github.com/TechnologyBrewery/reinheitgebot.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/TechnologyBrewery/reinheitsgebot.git</developerConnection>
         <url>https://github.com/TechnologyBrewery/reinheitsgebot</url>
-      <tag>HEAD</tag>
+      <tag>reinheitsgebot-1.1.0</tag>
   </scm>
 
     <properties>
