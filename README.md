@@ -69,7 +69,7 @@ produce example output in the `reinheitsgebot-test` module.  It should look
 like the following - please note the `(via dependencyManagement)` addition to
 warning output when the banned dependency exists in dependency management:
 ```
-[INFO] --- maven-enforcer-plugin:3.1.0:enforce (enforce-banned-dependencies-and-dependency-management-dependencies) @ reinheitsgebot-test ---
+[INFO] --- maven-enforcer-plugin:3.3.0:enforce (enforce-banned-dependencies-and-dependency-management-dependencies) @ reinheitsgebot-test ---
 [WARNING] Rule 0: org.technologybrewery.reinheitsgebot.BannedDependenciesIncludingDependencyManagementRule failed with message:
 Typically, you would like fail the build - but we just want to see warning here
 Found Banned Dependency (via dependencyManagement): org.technologybrewery.fermenter.stout:stout-java:jar:1.0.0

@@ -47,7 +47,7 @@
   </scm>
 
     <properties>
-        <version.enforcer>3.1.0</version.enforcer>
+        <version.enforcer>3.3.0</version.enforcer>
     </properties>
 
     <build>
