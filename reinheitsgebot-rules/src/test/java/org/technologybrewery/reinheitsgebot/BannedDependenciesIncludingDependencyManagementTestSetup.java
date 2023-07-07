@@ -6,8 +6,9 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.plugin.testing.ArtifactStubFactory;
-import org.apache.maven.plugins.enforcer.EnforcerTestUtils;
-import org.apache.maven.plugins.enforcer.MockProject;
+import org.apache.maven.enforcer.rules.EnforcerTestUtils;
+//import org.apache.maven.enforcer.rule.api.EnforcerTestUtils;
+//import org.apache.maven.plugins.enforcer.MockProject;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
 

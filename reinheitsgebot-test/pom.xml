@@ -51,6 +51,11 @@
                         <artifactId>reinheitsgebot-rules</artifactId>
                         <version>${project.version}</version>
                     </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.enforcer</groupId>
+                        <artifactId>enforcer-rules</artifactId>
+                        <version>${version.enforcer}</version>
+                    </dependency>
                 </dependencies>
             </plugin>
         </plugins>

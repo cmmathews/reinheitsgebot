@@ -1,28 +1,23 @@
 package org.technologybrewery.reinheitsgebot;
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
-import org.apache.maven.enforcer.rules.utils.ArtifactUtils;
-import org.apache.maven.artifact.handler.ArtifactHandler;
-import org.apache.maven.enforcer.rule.api.EnforcerRule;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.DependencyManagement;
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.enforcer.rules.AbstractStandardEnforcerRule;
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.execution.MavenSession;
-import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
-import org.apache.maven.rtinfo.RuntimeInformation;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.artifact.handler.ArtifactHandler;
+import org.apache.maven.enforcer.rule.api.EnforcerRule;
+import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
+import org.apache.maven.enforcer.rules.dependency.ReinheitsgebotBannedDependencyBase;
+import org.apache.maven.enforcer.rules.dependency.ReinheitsgebotResolverUtil;
+import org.apache.maven.enforcer.rules.utils.ArtifactUtils;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.rtinfo.RuntimeInformation;
 
 /**
  * Extends the standard Maven Enforcer Banned Dependency rule to include support for searching for banned dependencies
@@ -35,8 +30,13 @@ import javax.inject.Inject;
  * module are missed and become GAV errors in the child, limiting the usefulness of the banned dependency check for
  * that scenario.
  */
-public class BannedDependenciesIncludingDependencyManagementRule extends AbstractStandardEnforcerRule {
-
+public class BannedDependenciesIncludingDependencyManagementRule extends ReinheitsgebotBannedDependencyBase {
+    
+    BannedDependenciesIncludingDependencyManagementRule(MavenSession session, ReinheitsgebotResolverUtil resolverUtil) {
+        super(session, resolverUtil);
+        //TODO Auto-generated constructor stub
+    }
+    
     /**
      * Dependency management dependencies pulled off the Maven Project.
      */
@@ -67,13 +67,13 @@ public class BannedDependenciesIncludingDependencyManagementRule extends Abstrac
         super(session, resolverUtil);
     }
     */
-    @Override
+    //@Override
     public boolean isCacheable() {
         boolean responseCacheable = true;
         return responseCacheable;
     }
 
-    @Override
+    //@Override
     public boolean isResultValid(EnforcerRule cachedRule){
         return true;
     }
@@ -90,26 +90,36 @@ public class BannedDependenciesIncludingDependencyManagementRule extends Abstrac
     }
 
     @Override
-    public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+    public void execute() throws EnforcerRuleException {
         MavenProject project;
+        /*
         try {
             project = (MavenProject) helper.evaluate("${project}");
         } catch (ExpressionEvaluationException eee) {
             throw new EnforcerRuleException("Unable to retrieve the MavenProject: ", eee);
         }
-
+        
         DependencyManagement dependencyManagement = project.getDependencyManagement();
         if (dependencyManagement != null) {
             dependencyManagementDependencies = dependencyManagement.getDependencies();
         } else {
             dependencyManagementDependencies = Collections.emptyList();
         }
+        */
+
+        //getLog().info("Retrieved Target Folder: " + project.getBuild().getDirectory());
+        //getLog().info("Retrieved ArtifactId: " + project.getArtifactId());
+        //getLog().info("Retrieved Project: " + project);
+        getLog().info("Retrieved Maven version: " + runtimeInformation.getMavenVersion());
+        getLog().info("Retrieved Session: " + session);
+        getLog().warnOrError("Parameter shouldIfail: " + shouldIfail);
+        getLog().info(() -> "Parameter listParameters: " + listParameters);
 
         if (this.shouldIfail) {
             throw new EnforcerRuleException("Failing because my param said so.");
         }
 
-        super.execute(helper);
+        super.execute();
 
     }
 
@@ -127,14 +137,14 @@ public class BannedDependenciesIncludingDependencyManagementRule extends Abstrac
             throws EnforcerRuleException {
 
         // check standard dependencies for banned artifacts:
-        Set<Artifact> bannedDependencies = super.checkDependencies(theDependencies, log);
+       //Set<Artifact> bannedDependencies = checkDependencies(theDependencies, log);
 
         // check dependencies from dependency management for banned artifacts:
         Set<Artifact> bannedDependenciesFromDependencyManagement = checkForDependencyManagementBannedDependencies(log);
 
         Set<Artifact> combinedBannedDependencies = new TreeSet<>();
-        if (bannedDependencies != null) {
-            combinedBannedDependencies.addAll(bannedDependencies);
+        if (theDependencies != null) {
+            combinedBannedDependencies.addAll(theDependencies);
         }
         if (bannedDependenciesFromDependencyManagement != null) {
             combinedBannedDependencies.addAll(bannedDependenciesFromDependencyManagement);
@@ -163,7 +173,7 @@ public class BannedDependenciesIncludingDependencyManagementRule extends Abstrac
             }
         }
 
-        return super.checkDependencies(dependenciesToCheck, log);
+        return checkDependencies(dependenciesToCheck, log);
     }
 
     //@Override
