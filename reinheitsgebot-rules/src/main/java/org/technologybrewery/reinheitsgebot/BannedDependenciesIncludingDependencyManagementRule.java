@@ -34,7 +34,6 @@ public class BannedDependenciesIncludingDependencyManagementRule extends Reinhei
     
     BannedDependenciesIncludingDependencyManagementRule(MavenSession session, ReinheitsgebotResolverUtil resolverUtil) {
         super(session, resolverUtil);
-        //TODO Auto-generated constructor stub
     }
     
     /**

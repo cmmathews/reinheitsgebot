@@ -43,6 +43,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.maven.enforcer</groupId>
+            <artifactId>enforcer-rules</artifactId>
+            <version>${version.enforcer}</version>
+            <type>test-jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
             <version>${version.maven}</version>
