@@ -6,14 +6,28 @@ import java.util.List;
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
+import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
+import org.apache.maven.enforcer.rules.EnforcerTestUtils;
 import org.apache.maven.enforcer.rules.dependency.ReinheitsgebotResolverUtil;
+import org.apache.maven.enforcer.rules.utils.MockEnforcerExpressionEvaluator;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
+import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
+import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.plugin.testing.ArtifactStubFactory;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * This is based on the Maven Enforcer Rules {@link org.apache.maven.plugins.enforcer.BannedDependenciesTestSetup} class,
@@ -21,17 +35,23 @@ import static org.mockito.Mockito.when;
  * <p>
  * It sets up the needed mock Maven project to test dependency management banning.
  */
+@ExtendWith(MockitoExtension.class)
 public class BannedDependenciesIncludingDependencyManagementTestSetup {
 
+    @Mock
     private MavenProject project;
 
+    @Mock
     private MavenSession session;
 
+    @Mock
     private ReinheitsgebotResolverUtil resolverUtil;
 
+    @InjectMocks
     private BannedDependenciesIncludingDependencyManagementRule rule;
 
-    public BannedDependenciesIncludingDependencyManagementTestSetup() throws IOException {
+    @Test
+    void BannedDependenciesIncludingDependencyManagementTestSetup() throws IOException {
         this.excludes = new ArrayList<>();
         this.includes = new ArrayList<>();
 
@@ -46,8 +66,13 @@ public class BannedDependenciesIncludingDependencyManagementTestSetup {
         project.setDependencyArtifacts(factory.getScopedArtifacts());
         this.dependencyManagement = project.getDependencyManagement();
 
-        //this.helper = EnforcerRuleUtilsHelper.getHelper(project);
-
+        this.helper = EnforcerTestUtils.getHelper(project);
+        ExpressionEvaluator eval;
+        MojoExecution mockExecution = mock( MojoExecution.class );
+        session.setCurrentProject( project );
+        eval = new PluginParameterExpressionEvaluator( session, mockExecution );
+        
+        this.helper = DefaultEnforcementRuleHelper( session, eval, new SystemStreamLog(), null );
         this.rule = newBannedDependenciesIncludingDependencyManagementRule();
         this.rule.setMessage(null);
 
@@ -62,11 +87,9 @@ public class BannedDependenciesIncludingDependencyManagementTestSetup {
 
     private List<String> excludes;
 
-    private final List<String> includes;
+    private List<String> includes;
 
-    //private final BannedDependenciesIncludingDependencyManagementRule rule;
-
-    //private final EnforcerRuleHelper helper;
+    private EnforcerRuleHelper helper;
 
     public void setSearchTransitive(boolean searchTransitive) {
         rule.setSearchTransitive(searchTransitive);
@@ -84,14 +107,14 @@ public class BannedDependenciesIncludingDependencyManagementTestSetup {
     public void addExcludeAndRunRule(String toAdd)
             throws EnforcerRuleException {
         excludes.add(toAdd);
-        //rule.execute(helper);
+        rule.execute();
     }
 
     public void addIncludeExcludeAndRunRule(String incAdd, String excAdd)
             throws EnforcerRuleException {
         excludes.add(excAdd);
         includes.add(incAdd);
-        //rule.execute(helper);
+        rule.execute();
     }
 
     public List<String> getExcludes() {

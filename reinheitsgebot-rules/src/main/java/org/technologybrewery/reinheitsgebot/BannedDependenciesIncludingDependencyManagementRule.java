@@ -1,5 +1,6 @@
 package org.technologybrewery.reinheitsgebot;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,14 +11,17 @@ import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.enforcer.rule.api.EnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
+import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.enforcer.rules.dependency.ReinheitsgebotBannedDependencyBase;
 import org.apache.maven.enforcer.rules.dependency.ReinheitsgebotResolverUtil;
 import org.apache.maven.enforcer.rules.utils.ArtifactUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.rtinfo.RuntimeInformation;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
 
 /**
  * Extends the standard Maven Enforcer Banned Dependency rule to include support for searching for banned dependencies
@@ -77,21 +81,19 @@ public class BannedDependenciesIncludingDependencyManagementRule extends Reinhei
         return true;
     }
 
-    //@Override
+    @Override
     protected boolean validate(Artifact artifact) {
         return !ArtifactUtils.matchDependencyArtifact(artifact, getExcludes())
                 || ArtifactUtils.matchDependencyArtifact(artifact, getIncludes());
     }
 
-    //@Override
+    @Override
     protected String getErrorMessage() {
         return "banned via the exclude/include list";
     }
 
-    @Override
-    public void execute() throws EnforcerRuleException {
+    public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
         MavenProject project;
-        /*
         try {
             project = (MavenProject) helper.evaluate("${project}");
         } catch (ExpressionEvaluationException eee) {
@@ -104,7 +106,7 @@ public class BannedDependenciesIncludingDependencyManagementRule extends Reinhei
         } else {
             dependencyManagementDependencies = Collections.emptyList();
         }
-        */
+        
 
         //getLog().info("Retrieved Target Folder: " + project.getBuild().getDirectory());
         //getLog().info("Retrieved ArtifactId: " + project.getArtifactId());
